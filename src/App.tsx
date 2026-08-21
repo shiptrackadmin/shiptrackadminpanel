@@ -10,6 +10,8 @@ import { Sidebar } from './components/Sidebar';
 
 type Page = 'login' | 'dashboard' | 'blog' | 'blog-create' | 'blog-edit' | 'categories' | 'seo';
 
+const API_BASE_URL = 'https://shiptrackadminpanel.onrender.com';
+
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<Page>('login');
@@ -41,13 +43,13 @@ export default function App() {
         if (!token) return;
         const headers = { 'Authorization': `Bearer ${token}` };
         
-        const blogsRes = await fetch('http://localhost:5002/api/blogs', { headers });
+        const blogsRes = await fetch(`${API_BASE_URL}/api/blogs`, { headers });
         if (blogsRes.ok) {
           const data = await blogsRes.json();
           setPosts(data);
         }
         
-        const catsRes = await fetch('http://localhost:5002/api/categories', { headers });
+        const catsRes = await fetch(`${API_BASE_URL}/api/categories`, { headers });
         if (catsRes.ok) {
           const data = await catsRes.json();
           setCategories(data);
@@ -88,7 +90,7 @@ export default function App() {
   const handleAddCategory = async (newCat: { name: string; slug: string }) => {
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch('http://localhost:5002/api/categories', {
+      const res = await fetch(`${API_BASE_URL}/api/categories`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -130,12 +132,12 @@ export default function App() {
         publishDate: postData.publishDate || new Date().toISOString().split('T')[0]
       };
 
-      let url = 'http://localhost:5002/api/blogs';
+      let url = `${API_BASE_URL}/api/blogs`;
       let method = 'POST';
 
       if (editingPost) {
         const editId = editingPost._id || editingPost.id;
-        url = `http://localhost:5002/api/blogs/${editId}`;
+        url = `${API_BASE_URL}/api/blogs/${editId}`;
         method = 'PUT';
       }
 
@@ -188,7 +190,7 @@ export default function App() {
         return;
       }
 
-      const res = await fetch(`http://localhost:5002/api/blogs/${postId}`, {
+      const res = await fetch(`${API_BASE_URL}/api/blogs/${postId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
