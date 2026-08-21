@@ -1,30 +1,52 @@
 import React, { useState } from 'react';
-import { Package, Mail, Lock, Eye, EyeOff, ShieldCheck, KeyRound } from 'lucide-react';
+import { Package, Mail, Lock, Eye, EyeOff, ShieldCheck } from 'lucide-react';
 
 interface LoginPageProps {
   onLoginSuccess: (token: string) => void;
 }
+
+const API_BASE_URL = 'https://shiptrackadminpanel.onrender.com';
 
 export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleFillDemo = () => {
-    setEmail('admin@shiptrack.com');
-    setPassword('admin2026!');
-    setError('');
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
     if (!email || !password) {
       setError('Please enter both email and password.');
       return;
     }
-    // Pass a token when logging in
-    onLoginSuccess('demo-token-123');
+
+    setLoading(true);
+    setError('');
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        onLoginSuccess(data.token);
+      } else {
+        setError(data.error || 'Invalid email or password. Please try again.');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      setError('Network error. Please check your connection and try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -44,20 +66,6 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
           <p className="text-xs text-slate-500 mt-2">
             Enter your administrative credentials to access the CMS panel.
           </p>
-        </div>
-
-        <div className="mb-6 bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between">
-          <div className="flex items-center gap-2 text-xs text-slate-600">
-            <KeyRound className="w-4 h-4 text-blue-600 shrink-0" />
-            <span>Need sample access?</span>
-          </div>
-          <button
-            type="button"
-            onClick={handleFillDemo}
-            className="text-xs font-semibold text-[#2563eb] hover:text-[#1e3a8a] hover:underline"
-          >
-            Load Demo Credentials
-          </button>
         </div>
 
         {error && (
@@ -115,10 +123,11 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
 
           <button
             type="submit"
-            className="w-full py-3 px-4 bg-[#1e3a8a] hover:bg-[#2563eb] text-white font-semibold text-sm rounded-xl shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2"
+            disabled={loading}
+            className="w-full py-3 px-4 bg-[#1e3a8a] hover:bg-[#2563eb] text-white font-semibold text-sm rounded-xl shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <ShieldCheck className="w-4 h-4" />
-            <span>Sign In to Admin Panel</span>
+            <span>{loading ? 'Signing in...' : 'Sign In to Admin Panel'}</span>
           </button>
         </form>
 
