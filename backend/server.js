@@ -32,6 +32,21 @@ mongoose.connect(MONGODB_URI)
   .then(() => console.log('✅ Connected to MongoDB'))
   .catch((err) => console.error('❌ MongoDB connection error:', err));
 
+// Root route
+app.get('/', (req, res) => {
+  res.json({ 
+    message: 'ShipTrack Backend API',
+    status: '✅ Running',
+    endpoints: {
+      test: '/api/test',
+      blogs: '/api/blogs',
+      categories: '/api/categories',
+      auth: '/api/auth/login',
+      sitemap: '/sitemap.xml'
+    }
+  });
+});
+
 // Test route
 app.get('/api/test', (req, res) => {
   res.json({ message: 'Backend is working!' });
