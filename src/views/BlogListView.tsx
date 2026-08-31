@@ -62,9 +62,9 @@ export const BlogListView: React.FC<BlogListViewProps> = ({
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Blog Posts</h1>
+          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Articoli del Blog</h1>
           <p className="text-sm text-slate-500 mt-0.5">
-            Manage, edit, publish, and structure parcel tracking articles.
+            Gestisci, modifica, pubblica e struttura gli articoli sul tracciamento dei pacchi.
           </p>
         </div>
 
@@ -73,7 +73,7 @@ export const BlogListView: React.FC<BlogListViewProps> = ({
           className="px-4 py-2.5 bg-[#1e3a8a] hover:bg-[#2563eb] text-white text-sm font-semibold rounded-xl shadow-xs transition-colors flex items-center justify-center gap-2 self-start sm:self-auto"
         >
           <Plus className="w-4 h-4" />
-          <span>+ Create New Post</span>
+          <span>+ Crea Nuovo Articolo</span>
         </button>
       </div>
 
@@ -91,7 +91,7 @@ export const BlogListView: React.FC<BlogListViewProps> = ({
               setSearchQuery(e.target.value);
               setCurrentPageNum(1);
             }}
-            placeholder="Search by post title or author..."
+            placeholder="Cerca per titolo o autore..."
             className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-300 rounded-xl text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:bg-white transition-all"
           />
         </div>
@@ -101,27 +101,27 @@ export const BlogListView: React.FC<BlogListViewProps> = ({
           {/* Status Filter */}
           <div className="flex items-center gap-1.5 bg-slate-50 border border-slate-300 rounded-xl px-3 py-1.5 text-xs">
             <Filter className="w-3.5 h-3.5 text-slate-400" />
-            <span className="font-semibold text-slate-600">Status:</span>
+            <span className="font-semibold text-slate-600">Stato:</span>
             <select
               value={statusFilter}
               onChange={handleStatusFilterChange}
               className="bg-transparent text-slate-800 font-medium focus:outline-none cursor-pointer"
             >
-              <option value="All">All</option>
-              <option value="Published">Published</option>
-              <option value="Draft">Draft</option>
+              <option value="All">Tutti</option>
+              <option value="Published">Pubblicati</option>
+              <option value="Draft">Bozze</option>
             </select>
           </div>
 
           {/* Category Filter */}
           <div className="flex items-center gap-1.5 bg-slate-50 border border-slate-300 rounded-xl px-3 py-1.5 text-xs">
-            <span className="font-semibold text-slate-600">Category:</span>
+            <span className="font-semibold text-slate-600">Categoria:</span>
             <select
               value={categoryFilter}
               onChange={handleCategoryFilterChange}
               className="bg-transparent text-slate-800 font-medium focus:outline-none cursor-pointer"
             >
-              <option value="All">All Categories</option>
+              <option value="All">Tutte le Categorie</option>
               {categories.map((cat) => (
                 <option key={cat.id} value={cat.name}>
                   {cat.name}
@@ -132,7 +132,7 @@ export const BlogListView: React.FC<BlogListViewProps> = ({
 
           {/* Post Counter Badge */}
           <span className="px-3 py-1.5 rounded-xl bg-blue-50 text-[#1e3a8a] text-xs font-bold border border-blue-100">
-            {filteredPosts.length} posts
+            {filteredPosts.length} articoli
           </span>
         </div>
       </div>
@@ -143,11 +143,11 @@ export const BlogListView: React.FC<BlogListViewProps> = ({
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-200 text-[11px] uppercase tracking-wider font-bold text-slate-500">
-                <th className="py-3.5 px-6">Title</th>
-                <th className="py-3.5 px-6">Category</th>
-                <th className="py-3.5 px-6">Status</th>
-                <th className="py-3.5 px-6">Publish Date</th>
-                <th className="py-3.5 px-6 text-right">Actions</th>
+                <th className="py-3.5 px-6">Titolo</th>
+                <th className="py-3.5 px-6">Categoria</th>
+                <th className="py-3.5 px-6">Stato</th>
+                <th className="py-3.5 px-6">Data Pubblicazione</th>
+                <th className="py-3.5 px-6 text-right">Azioni</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-200 text-sm">
@@ -160,7 +160,7 @@ export const BlogListView: React.FC<BlogListViewProps> = ({
                         {post.title}
                       </div>
                       <div className="text-xs text-slate-500 mt-0.5">
-                        By <span className="font-semibold text-slate-700">{post.author}</span> • Read time: {post.readTime}
+                        Di <span className="font-semibold text-slate-700">{post.author}</span> • Tempo di lettura: {post.readTime}
                       </div>
                     </td>
 
@@ -176,12 +176,12 @@ export const BlogListView: React.FC<BlogListViewProps> = ({
                       {post.status === 'Published' ? (
                         <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-bold">
                           <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                          Published
+                          Pubblicato
                         </span>
                       ) : (
                         <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-200 text-xs font-bold">
                           <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
-                          Draft
+                          Bozza
                         </span>
                       )}
                     </td>
@@ -197,14 +197,14 @@ export const BlogListView: React.FC<BlogListViewProps> = ({
                         <button
                           onClick={() => onEditPost(post)}
                           className="p-1.5 rounded-lg text-slate-600 hover:text-[#1e3a8a] hover:bg-blue-50 transition-colors"
-                          title="Edit Post"
+                          title="Modifica Articolo"
                         >
                           <Edit className="w-4 h-4" />
                         </button>
                         <button
                           onClick={() => onDeletePost(post)}
                           className="p-1.5 rounded-lg text-slate-600 hover:text-red-600 hover:bg-red-50 transition-colors"
-                          title="Delete Post"
+                          title="Elimina Articolo"
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>
@@ -216,9 +216,9 @@ export const BlogListView: React.FC<BlogListViewProps> = ({
                 <tr>
                   <td colSpan={5} className="py-12 text-center text-slate-500">
                     <FileText className="w-8 h-8 text-slate-300 mx-auto mb-2" />
-                    <p className="font-semibold text-slate-700">No blog posts found</p>
+                    <p className="font-semibold text-slate-700">Nessun articolo trovato</p>
                     <p className="text-xs text-slate-400 mt-1">
-                      Try adjusting your search query or filter settings.
+                      Prova a modificare la ricerca o i filtri.
                     </p>
                   </td>
                 </tr>
@@ -230,9 +230,9 @@ export const BlogListView: React.FC<BlogListViewProps> = ({
         {/* Table Footer / Pagination */}
         <div className="p-4 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-600">
           <div>
-            Page <span className="font-bold text-slate-900">{currentPageNum}</span> of{' '}
+            Pagina <span className="font-bold text-slate-900">{currentPageNum}</span> di{' '}
             <span className="font-bold text-slate-900">{totalPages}</span> ({filteredPosts.length}{' '}
-            posts filtered)
+            articoli filtrati)
           </div>
 
           <div className="flex items-center gap-2">
@@ -241,14 +241,14 @@ export const BlogListView: React.FC<BlogListViewProps> = ({
               disabled={currentPageNum === 1}
               className="px-3 py-1.5 rounded-lg bg-white border border-slate-300 text-slate-700 font-semibold hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-1"
             >
-              <ChevronLeft className="w-4 h-4" /> Previous
+              <ChevronLeft className="w-4 h-4" /> Precedente
             </button>
             <button
               onClick={() => setCurrentPageNum((p) => Math.min(totalPages, p + 1))}
               disabled={currentPageNum === totalPages}
               className="px-3 py-1.5 rounded-lg bg-white border border-slate-300 text-slate-700 font-semibold hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-1"
             >
-              Next <ChevronRight className="w-4 h-4" />
+              Successivo <ChevronRight className="w-4 h-4" />
             </button>
           </div>
         </div>

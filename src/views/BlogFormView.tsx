@@ -230,14 +230,9 @@ export const BlogFormView: React.FC<BlogFormViewProps> = ({
               </div>
 
               <div>
-                <div className="flex items-center justify-between mb-1">
-                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
-                    Short Summary
-                  </label>
-                  <span className={`text-xs ${shortSummary.length > 160 ? 'text-red-500 font-bold' : 'text-slate-400'}`}>
-                    {shortSummary.length} / 160 chars
-                  </span>
-                </div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+                  Short Summary
+                </label>
                 <textarea
                   rows={2}
                   value={shortSummary}
@@ -248,10 +243,7 @@ export const BlogFormView: React.FC<BlogFormViewProps> = ({
               </div>
 
               <div>
-                <div className="flex items-center justify-between mb-1">
-                  <label className="block text-xs font-semibold text-slate-700">SEO Title</label>
-                  <span className="text-[11px] text-slate-400">{seoTitle.length} / 60 chars</span>
-                </div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">SEO Title</label>
                 <input
                   type="text"
                   value={seoTitle}
@@ -262,16 +254,13 @@ export const BlogFormView: React.FC<BlogFormViewProps> = ({
               </div>
 
               <div>
-                <div className="flex items-center justify-between mb-1">
-                  <label className="block text-xs font-semibold text-slate-700">SEO Meta Description</label>
-                  <span className="text-[11px] text-slate-400">{seoDescription.length} / 160 chars</span>
-                </div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">SEO Meta Description</label>
                 <textarea
                   rows={2}
                   value={seoDescription}
                   onChange={(e) => setSeoDescription(e.target.value)}
                   placeholder={shortSummary || 'Custom search engine snippet...'}
-                  className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:bg-white transition-all"
+                  className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:bg-white transition-all"
                 />
               </div>
             </div>
@@ -333,14 +322,9 @@ export const BlogFormView: React.FC<BlogFormViewProps> = ({
               </div>
 
               <div>
-                <div className="flex items-center justify-between mb-1">
-                  <label className="block text-xs font-semibold text-slate-700">
-                    Breve Riassunto
-                  </label>
-                  <span className={`text-xs ${shortSummaryIt.length > 160 ? 'text-red-500 font-bold' : 'text-slate-400'}`}>
-                    {shortSummaryIt.length} / 160 chars
-                  </span>
-                </div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  Breve Riassunto
+                </label>
                 <textarea
                   rows={2}
                   value={shortSummaryIt}
@@ -351,10 +335,7 @@ export const BlogFormView: React.FC<BlogFormViewProps> = ({
               </div>
 
               <div>
-                <div className="flex items-center justify-between mb-1">
-                  <label className="block text-xs font-semibold text-slate-700">SEO Titolo</label>
-                  <span className="text-[11px] text-slate-400">{seoTitleIt.length} / 60 chars</span>
-                </div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">SEO Titolo</label>
                 <input
                   type="text"
                   value={seoTitleIt}
@@ -365,16 +346,13 @@ export const BlogFormView: React.FC<BlogFormViewProps> = ({
               </div>
 
               <div>
-                <div className="flex items-center justify-between mb-1">
-                  <label className="block text-xs font-semibold text-slate-700">SEO Meta Descrizione</label>
-                  <span className="text-[11px] text-slate-400">{seoDescriptionIt.length} / 160 chars</span>
-                </div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">SEO Meta Descrizione</label>
                 <textarea
                   rows={2}
                   value={seoDescriptionIt}
                   onChange={(e) => setSeoDescriptionIt(e.target.value)}
                   placeholder={shortSummaryIt || 'Descrizione SEO personalizzata...'}
-                  className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-green-600 focus:bg-white transition-all"
+                  className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-green-600 focus:bg-white transition-all"
                 />
               </div>
             </div>
@@ -430,25 +408,14 @@ export const BlogFormView: React.FC<BlogFormViewProps> = ({
                 </p>
                 <p className="text-[11px] text-slate-400 mt-0.5">PNG, JPG, WebP up to 5MB</p>
 
-                <div className="mt-4 max-w-lg mx-auto flex items-center gap-2">
+                <div className="mt-4 max-w-lg mx-auto">
                   <input
                     type="url"
                     value={featuredImage}
                     onChange={(e) => setFeaturedImage(e.target.value)}
                     placeholder="https://images.unsplash.com/..."
-                    className="flex-1 px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                    className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-600"
                   />
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setFeaturedImage(
-                        'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=800&q=80'
-                      )
-                    }
-                    className="px-3 py-2 bg-slate-200 hover:bg-slate-300 rounded-xl text-xs font-medium text-slate-700 transition-colors"
-                  >
-                    Load Sample
-                  </button>
                 </div>
 
                 {featuredImage && (

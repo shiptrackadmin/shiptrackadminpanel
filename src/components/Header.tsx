@@ -18,13 +18,13 @@ export const Header: React.FC<HeaderProps> = ({
   setMobileMenuOpen,
 }) => {
   const pageTitles: Record<Page, string> = {
-    login: 'Admin Sign In',
-    dashboard: 'Dashboard Overview',
-    blog: 'Blog Management',
-    'blog-create': 'Create New Blog Post',
-    'blog-edit': 'Edit Blog Post',
-    categories: 'Categories Management',
-    seo: 'SEO & Indexing Configurations',
+    login: 'Accesso Amministratore',
+    dashboard: 'Panoramica Dashboard',
+    blog: 'Gestione Blog',
+    'blog-create': 'Crea Nuovo Articolo',
+    'blog-edit': 'Modifica Articolo',
+    categories: 'Gestione Categorie',
+    seo: 'Configurazioni SEO e Indicizzazione',
   };
 
   return (
@@ -54,16 +54,16 @@ export const Header: React.FC<HeaderProps> = ({
                 </span>
               </div>
               <p className="text-xs text-slate-500 hidden sm:block">
-                {pageTitles[currentPage] || 'Admin Panel'}
+                {pageTitles[currentPage] || 'Pannello di Controllo'}
               </p>
             </div>
           </div>
         </div>
 
-        {/* Center: Quick Screen Switcher (for easy previewing as requested in prompt) */}
+        {/* Center: Quick Screen Switcher */}
         <div className="hidden xl:flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs">
           <span className="px-2 text-slate-400 font-medium text-[11px] uppercase tracking-wider">
-            Screen View:
+            Schermata:
           </span>
           <button
             onClick={() => onNavigate('login')}
@@ -93,7 +93,7 @@ export const Header: React.FC<HeaderProps> = ({
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            3. Blog List
+            3. Lista Blog
           </button>
           <button
             onClick={() => onNavigate('blog-create')}
@@ -103,7 +103,7 @@ export const Header: React.FC<HeaderProps> = ({
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            4. Create Post
+            4. Crea Articolo
           </button>
           <button
             onClick={() => onNavigate('categories')}
@@ -113,7 +113,7 @@ export const Header: React.FC<HeaderProps> = ({
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            5. Categories
+            5. Categorie
           </button>
           <button
             onClick={() => onNavigate('seo')}
@@ -123,16 +123,16 @@ export const Header: React.FC<HeaderProps> = ({
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            6. SEO Settings
+            6. Impostazioni SEO
           </button>
         </div>
 
-        {/* Right: Admin User Label (NO avatar, NO profile picture, NO dropdown, NO edit options) */}
+        {/* Right: Admin User Label */}
         {isLoggedIn ? (
           <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-lg text-xs sm:text-sm">
             <ShieldCheck className="w-4 h-4 text-[#2563eb]" />
             <div className="text-right">
-              <span className="font-semibold text-slate-800">Admin</span>
+              <span className="font-semibold text-slate-800">Amministratore</span>
               <span className="text-slate-500 text-xs hidden md:inline ml-1">
                 (admin@shiptrack.com)
               </span>
@@ -140,7 +140,7 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
         ) : (
           <div className="text-xs text-slate-500 font-medium">
-            Secured Session
+            Sessione Sicura
           </div>
         )}
       </div>

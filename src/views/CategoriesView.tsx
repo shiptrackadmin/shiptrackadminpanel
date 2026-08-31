@@ -78,9 +78,9 @@ export const CategoriesView: React.FC<CategoriesViewProps> = ({
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Categories</h1>
+          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Categorie</h1>
           <p className="text-sm text-slate-500 mt-0.5">
-            Organize parcel tracking guides, customs news, and courier updates into clean topic taxonomy.
+            Organizza guide sul tracciamento dei pacchi, notizie doganali e aggiornamenti sui corrieri in una tassonomia chiara.
           </p>
         </div>
 
@@ -89,7 +89,7 @@ export const CategoriesView: React.FC<CategoriesViewProps> = ({
           className="px-4 py-2.5 bg-[#1e3a8a] hover:bg-[#2563eb] text-white text-sm font-semibold rounded-xl shadow-xs transition-colors flex items-center justify-center gap-2 self-start sm:self-auto"
         >
           <Plus className="w-4 h-4" />
-          <span>+ Add Category</span>
+          <span>+ Aggiungi Categoria</span>
         </button>
       </div>
 
@@ -103,13 +103,13 @@ export const CategoriesView: React.FC<CategoriesViewProps> = ({
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search category name..."
+            placeholder="Cerca nome categoria..."
             className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-300 rounded-xl text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:bg-white transition-all"
           />
         </div>
 
         <span className="text-xs font-bold text-[#1e3a8a] bg-blue-50 border border-blue-100 px-3 py-1.5 rounded-xl">
-          {filteredCategories.length} Categories
+          {filteredCategories.length} Categorie
         </span>
       </div>
 
@@ -129,14 +129,14 @@ export const CategoriesView: React.FC<CategoriesViewProps> = ({
                   <button
                     onClick={() => handleOpenEditModal(cat)}
                     className="p-1.5 rounded-lg text-slate-400 hover:text-[#1e3a8a] hover:bg-slate-100 transition-colors"
-                    title="Edit Category"
+                    title="Modifica Categoria"
                   >
                     <Edit className="w-4 h-4" />
                   </button>
                   <button
                     onClick={() => onDeleteCategory(cat)}
                     className="p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors"
-                    title="Delete Category"
+                    title="Elimina Categoria"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -155,9 +155,9 @@ export const CategoriesView: React.FC<CategoriesViewProps> = ({
             {/* Bottom Meta */}
             <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
               <span className="font-semibold text-slate-700 bg-slate-100 px-2.5 py-1 rounded-md">
-                {cat.postCount} posts
+                {cat.postCount} articoli
               </span>
-              <span className="font-mono text-[11px] text-slate-400">Created {cat.createdDate}</span>
+              <span className="font-mono text-[11px] text-slate-400">Creata il {cat.createdDate}</span>
             </div>
           </div>
         ))}
@@ -170,7 +170,7 @@ export const CategoriesView: React.FC<CategoriesViewProps> = ({
             <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
               <div className="flex items-center gap-2 text-slate-900">
                 <FolderPlus className="w-5 h-5 text-blue-600" />
-                <h3 className="text-lg font-bold">Add Category</h3>
+                <h3 className="text-lg font-bold">Aggiungi Categoria</h3>
               </div>
               <button
                 onClick={() => setIsAddModalOpen(false)}
@@ -183,13 +183,13 @@ export const CategoriesView: React.FC<CategoriesViewProps> = ({
             <form onSubmit={handleSaveAdd} className="space-y-4">
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
-                  Category Name *
+                  Nome Categoria *
                 </label>
                 <input
                   type="text"
                   value={catName}
                   onChange={(e) => handleNameChange(e.target.value)}
-                  placeholder="e.g. Warehousing & Fulfillment"
+                  placeholder="es. Magazzinaggio & Evasione"
                   className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:bg-white"
                   required
                 />
@@ -204,13 +204,11 @@ export const CategoriesView: React.FC<CategoriesViewProps> = ({
                     setCatSlug(e.target.value);
                     setIsSlugManuallyEdited(true);
                   }}
-                  placeholder="/warehousing-and-fulfillment"
+                  placeholder="/magazzinaggio-e-evasione"
                   className="w-full px-3.5 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-mono text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-600"
                   required
                 />
               </div>
-
-              {/* STRICTLY NO Category Description Field anywhere! */}
 
               <div className="flex items-center justify-end gap-3 pt-3">
                 <button
@@ -218,14 +216,14 @@ export const CategoriesView: React.FC<CategoriesViewProps> = ({
                   onClick={() => setIsAddModalOpen(false)}
                   className="px-4 py-2 rounded-xl text-sm font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 transition-colors"
                 >
-                  Cancel
+                  Annulla
                 </button>
                 <button
                   type="submit"
                   className="px-4 py-2 rounded-xl text-sm font-semibold text-white bg-[#1e3a8a] hover:bg-[#2563eb] transition-colors flex items-center gap-1.5 shadow-xs"
                 >
                   <Plus className="w-4 h-4" />
-                  Add Category
+                  Aggiungi Categoria
                 </button>
               </div>
             </form>
@@ -240,7 +238,7 @@ export const CategoriesView: React.FC<CategoriesViewProps> = ({
             <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
               <div className="flex items-center gap-2 text-slate-900">
                 <Edit className="w-5 h-5 text-blue-600" />
-                <h3 className="text-lg font-bold">Edit Category</h3>
+                <h3 className="text-lg font-bold">Modifica Categoria</h3>
               </div>
               <button
                 onClick={() => setEditingCategory(null)}
@@ -253,7 +251,7 @@ export const CategoriesView: React.FC<CategoriesViewProps> = ({
             <form onSubmit={handleSaveEdit} className="space-y-4">
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
-                  Category Name *
+                  Nome Categoria *
                 </label>
                 <input
                   type="text"
@@ -275,22 +273,20 @@ export const CategoriesView: React.FC<CategoriesViewProps> = ({
                 />
               </div>
 
-              {/* STRICTLY NO Category Description Field anywhere! */}
-
               <div className="flex items-center justify-end gap-3 pt-3">
                 <button
                   type="button"
                   onClick={() => setEditingCategory(null)}
                   className="px-4 py-2 rounded-xl text-sm font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 transition-colors"
                 >
-                  Cancel
+                  Annulla
                 </button>
                 <button
                   type="submit"
                   className="px-4 py-2 rounded-xl text-sm font-semibold text-white bg-[#1e3a8a] hover:bg-[#2563eb] transition-colors flex items-center gap-1.5 shadow-xs"
                 >
                   <Check className="w-4 h-4" />
-                  Save Changes
+                  Salva Modifiche
                 </button>
               </div>
             </form>

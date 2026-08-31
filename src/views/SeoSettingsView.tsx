@@ -34,14 +34,14 @@ export const SeoSettingsView: React.FC<SeoSettingsViewProps> = ({
   const handleCopyUrl = () => {
     navigator.clipboard.writeText(seoConfig.sitemapUrl);
     setCopiedUrl(true);
-    onShowToast('Sitemap URL Copied', 'Sitemap link copied to clipboard.');
+    onShowToast('URL Sitemap Copiato', 'Link sitemap copiato negli appunti.');
     setTimeout(() => setCopiedUrl(false), 2500);
   };
 
   const handleRegenerateSitemap = () => {
     const nowUtc = new Date().toISOString().replace('T', ' ').substring(0, 16) + ' UTC';
     onUpdateSeoConfig({ sitemapLastGenerated: nowUtc });
-    onShowToast('XML Sitemap Regenerated', `Updated sitemap index at ${nowUtc}`);
+    onShowToast('Sitemap XML Rigenerato', `Indice sitemap aggiornato al ${nowUtc}`);
   };
 
   const handleUpdateRobots = () => {
@@ -50,7 +50,7 @@ export const SeoSettingsView: React.FC<SeoSettingsViewProps> = ({
       robotsTxt,
       robotsLastUpdated: nowUtc,
     });
-    onShowToast('Robots.txt Saved', 'Search engine crawler directives updated successfully.');
+    onShowToast('Robots.txt Salvato', 'Direttive crawler aggiornate con successo.');
   };
 
   const handleSaveDefaults = () => {
@@ -59,7 +59,7 @@ export const SeoSettingsView: React.FC<SeoSettingsViewProps> = ({
       canonicalEnabled,
       globalMetaDescription,
     });
-    onShowToast('Global Meta Defaults Saved', 'Fallback title and canonical tags updated.');
+    onShowToast('Default Meta Salvati', 'Titoli fallback e canonical aggiornati.');
   };
 
   return (
@@ -67,10 +67,10 @@ export const SeoSettingsView: React.FC<SeoSettingsViewProps> = ({
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
-          SEO & Indexing Configurations
+          Configurazioni SEO & Indicizzazione
         </h1>
         <p className="text-sm text-slate-500 mt-1">
-          Control search engine indexing, sitemap generation, and global metadata rules.
+          Controlla l'indicizzazione dei motori di ricerca, la generazione della sitemap e le regole meta globali.
         </p>
       </div>
 
@@ -81,9 +81,9 @@ export const SeoSettingsView: React.FC<SeoSettingsViewProps> = ({
             <Globe className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="text-base font-bold text-slate-900">XML Sitemap Generator</h2>
+            <h2 className="text-base font-bold text-slate-900">Generatore Sitemap XML</h2>
             <p className="text-xs text-slate-500">
-              Automated XML sitemap structure submitted to Google Search Console and Bing Webmaster.
+              Struttura sitemap XML automatizzata inviata a Google Search Console e Bing Webmaster.
             </p>
           </div>
         </div>
@@ -91,7 +91,7 @@ export const SeoSettingsView: React.FC<SeoSettingsViewProps> = ({
         <div className="space-y-4">
           <div>
             <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
-              Public Sitemap Endpoint
+              Endpoint Sitemap Pubblico
             </label>
             <div className="flex items-center gap-2">
               <input
@@ -108,12 +108,12 @@ export const SeoSettingsView: React.FC<SeoSettingsViewProps> = ({
                 {copiedUrl ? (
                   <>
                     <Check className="w-4 h-4 text-emerald-600" />
-                    <span className="text-emerald-600">Copied!</span>
+                    <span className="text-emerald-600">Copiato!</span>
                   </>
                 ) : (
                   <>
                     <Copy className="w-4 h-4 text-slate-500" />
-                    <span>Copy URL</span>
+                    <span>Copia URL</span>
                   </>
                 )}
               </button>
@@ -122,7 +122,7 @@ export const SeoSettingsView: React.FC<SeoSettingsViewProps> = ({
 
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2">
             <div className="text-xs text-slate-500">
-              Last Generated:{' '}
+              Ultima Generazione:{' '}
               <span className="font-mono font-semibold text-slate-800">
                 {seoConfig.sitemapLastGenerated}
               </span>
@@ -134,7 +134,7 @@ export const SeoSettingsView: React.FC<SeoSettingsViewProps> = ({
               className="px-4 py-2.5 bg-[#1e3a8a] hover:bg-[#2563eb] text-white font-semibold text-xs rounded-xl shadow-xs transition-colors flex items-center justify-center gap-2 self-start sm:self-auto"
             >
               <RefreshCw className="w-4 h-4" />
-              <span>Regenerate Sitemap</span>
+              <span>Rigenera Sitemap</span>
             </button>
           </div>
         </div>
@@ -147,9 +147,9 @@ export const SeoSettingsView: React.FC<SeoSettingsViewProps> = ({
             <FileCode className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="text-base font-bold text-slate-900">Robots.txt Rules File</h2>
+            <h2 className="text-base font-bold text-slate-900">File Robots.txt</h2>
             <p className="text-xs text-slate-500">
-              Configure search engine bot indexing parameters and private route exclusions.
+              Configura i parametri di indicizzazione dei crawler e le esclusioni di percorsi privati.
             </p>
           </div>
         </div>
@@ -157,7 +157,7 @@ export const SeoSettingsView: React.FC<SeoSettingsViewProps> = ({
         <div className="space-y-4">
           <div>
             <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
-              Robots.txt Directives
+              Direttive Robots.txt
             </label>
             <textarea
               rows={8}
@@ -169,7 +169,7 @@ export const SeoSettingsView: React.FC<SeoSettingsViewProps> = ({
 
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2">
             <div className="text-xs text-slate-500">
-              Last updated:{' '}
+              Ultimo aggiornamento:{' '}
               <span className="font-mono font-semibold text-slate-800">
                 {seoConfig.robotsLastUpdated}
               </span>
@@ -181,7 +181,7 @@ export const SeoSettingsView: React.FC<SeoSettingsViewProps> = ({
               className="px-4 py-2.5 bg-[#1e3a8a] hover:bg-[#2563eb] text-white font-semibold text-xs rounded-xl shadow-xs transition-colors flex items-center justify-center gap-2 self-start sm:self-auto"
             >
               <Save className="w-4 h-4" />
-              <span>Update Robots.txt</span>
+              <span>Aggiorna Robots.txt</span>
             </button>
           </div>
         </div>
@@ -194,9 +194,9 @@ export const SeoSettingsView: React.FC<SeoSettingsViewProps> = ({
             <Sliders className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="text-base font-bold text-slate-900">Global Title & Meta Defaults</h2>
+            <h2 className="text-base font-bold text-slate-900">Default Globali Titolo & Meta</h2>
             <p className="text-xs text-slate-500">
-              Fallbacks applied when post-specific metadata is empty.
+              Fallback applicati quando i metadati specifici dell'articolo sono vuoti.
             </p>
           </div>
         </div>
@@ -205,17 +205,17 @@ export const SeoSettingsView: React.FC<SeoSettingsViewProps> = ({
           {/* Default Meta Title Suffix */}
           <div>
             <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
-              Default Meta Title Suffix
+              Suffisso Titolo Meta Default
             </label>
             <input
               type="text"
               value={metaTitleSuffix}
               onChange={(e) => setMetaTitleSuffix(e.target.value)}
-              placeholder="e.g. | ShipTrack Parcel Intelligence"
+              placeholder="es. | ShipTrack Parcel Intelligence"
               className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:bg-white"
             />
             <p className="text-[11px] text-slate-400 mt-1">
-              Appended automatically to post titles (e.g. "Customs Guide | ShipTrack Parcel Intelligence")
+              Aggiunto automaticamente ai titoli degli articoli (es. "Guida Doganale | ShipTrack Parcel Intelligence")
             </p>
           </div>
 
@@ -223,10 +223,10 @@ export const SeoSettingsView: React.FC<SeoSettingsViewProps> = ({
           <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl border border-slate-200">
             <div>
               <p className="text-xs font-bold uppercase tracking-wider text-slate-800">
-                Canonical URL Resolution
+                Risoluzione URL Canonical
               </p>
               <p className="text-xs text-slate-500 mt-0.5">
-                Enable <code>rel="canonical"</code> header tags to prevent duplicate content penalties.
+                Abilita i tag <code>rel="canonical"</code> per prevenire penalizzazioni di contenuti duplicati.
               </p>
             </div>
             <button
@@ -247,13 +247,13 @@ export const SeoSettingsView: React.FC<SeoSettingsViewProps> = ({
           {/* Default Global Meta Description */}
           <div>
             <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
-              Default Global Meta Description
+              Meta Descrizione Globale Default
             </label>
             <textarea
               rows={3}
               value={globalMetaDescription}
               onChange={(e) => setGlobalMetaDescription(e.target.value)}
-              placeholder="ShipTrack CMS powers official blog updates and parcel tracking intelligence..."
+              placeholder="ShipTrack CMS alimenta gli aggiornamenti ufficiali del blog e l'intelligence sul tracciamento dei pacchi..."
               className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:bg-white transition-all"
             />
           </div>
@@ -266,7 +266,7 @@ export const SeoSettingsView: React.FC<SeoSettingsViewProps> = ({
               className="px-5 py-2.5 bg-[#1e3a8a] hover:bg-[#2563eb] text-white font-semibold text-xs rounded-xl shadow-xs transition-colors flex items-center gap-2"
             >
               <CheckCircle2 className="w-4 h-4" />
-              <span>Save Defaults</span>
+              <span>Salva Default</span>
             </button>
           </div>
         </div>

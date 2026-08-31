@@ -27,10 +27,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
-            Welcome back, Admin!
+            Bentornato, Amministratore!
           </h1>
           <p className="text-sm text-slate-600 mt-1">
-            Here is an overview of your parcel tracking content repository, active drafts, and recent publishing activity.
+            Ecco una panoramica del tuo repository di contenuti per il tracciamento dei pacchi, bozze attive e attività di pubblicazione recenti.
           </p>
         </div>
         <div className="flex items-center gap-3">
@@ -39,7 +39,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             className="px-4 py-2.5 bg-[#1e3a8a] hover:bg-[#2563eb] text-white text-sm font-semibold rounded-xl shadow-xs transition-colors flex items-center gap-2"
           >
             <PlusCircle className="w-4 h-4" />
-            <span>Create New Post</span>
+            <span>Crea Nuovo Articolo</span>
           </button>
         </div>
       </div>
@@ -50,10 +50,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-xs flex items-start justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-              Total Blog Posts
+              Totale Articoli
             </p>
             <h3 className="text-2xl font-bold text-slate-900 mt-2">{totalPosts}</h3>
-            <p className="text-xs text-slate-500 mt-1 font-medium">Articles in CMS</p>
+            <p className="text-xs text-slate-500 mt-1 font-medium">Articoli nel CMS</p>
           </div>
           <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#1e3a8a] flex items-center justify-center shrink-0">
             <FileText className="w-5 h-5" />
@@ -64,10 +64,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-xs flex items-start justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-              Published Posts
+              Articoli Pubblicati
             </p>
             <h3 className="text-2xl font-bold text-emerald-600 mt-2">{publishedPosts}</h3>
-            <p className="text-xs text-slate-500 mt-1 font-medium">Live on site</p>
+            <p className="text-xs text-slate-500 mt-1 font-medium">Live sul sito</p>
           </div>
           <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
             <CheckCircle2 className="w-5 h-5" />
@@ -78,10 +78,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-xs flex items-start justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-              Draft Posts
+              Bozze
             </p>
             <h3 className="text-2xl font-bold text-amber-600 mt-2">{draftPosts}</h3>
-            <p className="text-xs text-slate-500 mt-1 font-medium">Scheduled for review</p>
+            <p className="text-xs text-slate-500 mt-1 font-medium">In revisione</p>
           </div>
           <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
             <FileClock className="w-5 h-5" />
@@ -92,10 +92,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-xs flex items-start justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-              Categories
+              Categorie
             </p>
             <h3 className="text-2xl font-bold text-indigo-600 mt-2">{totalCategories}</h3>
-            <p className="text-xs text-slate-500 mt-1 font-medium">Organized topics</p>
+            <p className="text-xs text-slate-500 mt-1 font-medium">Argomenti organizzati</p>
           </div>
           <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
             <Tag className="w-5 h-5" />
@@ -111,9 +111,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
           <div className="flex items-center gap-2">
             <Clock className="w-5 h-5 text-slate-500" />
-            <h2 className="text-base font-bold text-slate-900">Recent Activity</h2>
+            <h2 className="text-base font-bold text-slate-900">Attività Recenti</h2>
           </div>
-          <span className="text-xs font-medium text-slate-500">Audit Logs</span>
+          <span className="text-xs font-medium text-slate-500">Registro Audit</span>
         </div>
 
         <div className="divide-y divide-slate-100">
@@ -129,12 +129,12 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         </div>
 
         <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-          <span>System activity logged automatically.</span>
+          <span>Attività di sistema registrata automaticamente.</span>
           <button
             onClick={() => onNavigate('blog')}
             className="text-[#2563eb] hover:text-[#1e3a8a] font-semibold flex items-center gap-1"
           >
-            Go to Blog Management <ArrowRight className="w-3.5 h-3.5" />
+            Vai alla Gestione Blog <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>
       </div>

@@ -18,7 +18,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
     e.preventDefault();
     
     if (!email || !password) {
-      setError('Please enter both email and password.');
+      setError('Inserisci sia email che password.');
       return;
     }
 
@@ -39,11 +39,11 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
       if (response.ok && data.success) {
         onLoginSuccess(data.token);
       } else {
-        setError(data.error || 'Invalid email or password. Please try again.');
+        setError(data.error || 'Email o password non validi. Riprova.');
       }
     } catch (error) {
       console.error('Login error:', error);
-      setError('Network error. Please check your connection and try again.');
+      setError('Errore di rete. Controlla la connessione e riprova.');
     } finally {
       setLoading(false);
     }
@@ -61,10 +61,10 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
           </div>
           <h1 className="text-2xl font-bold text-slate-900 tracking-tight">ShipTrack</h1>
           <p className="text-sm font-semibold text-[#2563eb] mt-0.5 tracking-wide uppercase">
-            Content Management System
+            Sistema di Gestione Contenuti
           </p>
           <p className="text-xs text-slate-500 mt-2">
-            Enter your administrative credentials to access the CMS panel.
+            Inserisci le tue credenziali amministrative per accedere al pannello CMS.
           </p>
         </div>
 
@@ -77,7 +77,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
             <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-1.5">
-              Email Address
+              Indirizzo Email
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
@@ -114,7 +114,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 transition-colors"
-                aria-label={showPassword ? 'Hide password' : 'Show password'}
+                aria-label={showPassword ? 'Nascondi password' : 'Mostra password'}
               >
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
@@ -127,13 +127,13 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
             className="w-full py-3 px-4 bg-[#1e3a8a] hover:bg-[#2563eb] text-white font-semibold text-sm rounded-xl shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <ShieldCheck className="w-4 h-4" />
-            <span>{loading ? 'Signing in...' : 'Sign In to Admin Panel'}</span>
+            <span>{loading ? 'Accesso in corso...' : 'Accedi al Pannello Admin'}</span>
           </button>
         </form>
 
         <div className="mt-8 pt-5 border-t border-slate-200 text-center">
           <p className="text-xs text-slate-500 font-medium">
-            ShipTrack CMS v2.4 • Secured with SSL
+            ShipTrack CMS v2.4 • Protetto con SSL
           </p>
         </div>
       </div>

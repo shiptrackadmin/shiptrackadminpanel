@@ -1,3 +1,5 @@
+export type Page = 'login' | 'dashboard' | 'blog' | 'blog-create' | 'blog-edit' | 'categories' | 'seo';
+
 export interface BlogPost {
   id?: string;
   _id?: string;
@@ -32,4 +34,22 @@ export interface Category {
   name: string;
   slug: string;
   createdAt?: string;
+  postCount?: number;
+  createdDate?: string;
+}
+
+export interface ActivityLog {
+  id: string;
+  message: string;
+  timestamp: string;
+}
+
+export interface SeoConfig {
+  sitemapUrl: string;
+  sitemapLastGenerated: string;
+  robotsTxt: string;
+  robotsLastUpdated: string;
+  metaTitleSuffix: string;
+  canonicalEnabled: boolean;
+  globalMetaDescription: string;
 }
