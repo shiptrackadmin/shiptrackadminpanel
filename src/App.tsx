@@ -125,12 +125,49 @@ export default function App() {
         'Authorization': `Bearer ${token}`
       };
 
+      // Log what we're receiving from the form
+      console.log('📥 Received from form:', postData);
+      console.log('📥 Italian fields received:', {
+        titleIt: postData.titleIt,
+        slugIt: postData.slugIt,
+        bodyContentIt: postData.bodyContentIt ? postData.bodyContentIt.substring(0, 50) + '...' : 'empty',
+        shortSummaryIt: postData.shortSummaryIt,
+        seoTitleIt: postData.seoTitleIt,
+        seoDescriptionIt: postData.seoDescriptionIt
+      });
+
+      // Build the post object with ALL fields explicitly
       const postToSave = {
-        ...postData,
+        // English
+        title: postData.title || '',
+        slug: postData.slug || '',
+        bodyContent: postData.bodyContent || '',
+        shortSummary: postData.shortSummary || '',
+        seoTitle: postData.seoTitle || postData.title || '',
+        seoDescription: postData.seoDescription || postData.shortSummary || '',
+        // Italian
+        titleIt: postData.titleIt || '',
+        slugIt: postData.slugIt || '',
+        bodyContentIt: postData.bodyContentIt || '',
+        shortSummaryIt: postData.shortSummaryIt || '',
+        seoTitleIt: postData.seoTitleIt || postData.titleIt || '',
+        seoDescriptionIt: postData.seoDescriptionIt || postData.shortSummaryIt || '',
+        // Common
+        category: postData.category || '',
+        featuredImage: postData.featuredImage || '',
+        targetKeywords: postData.targetKeywords || '',
+        readTime: postData.readTime || '5 minutes',
         status: targetStatus,
-        author: 'Admin',
-        publishDate: postData.publishDate || new Date().toISOString().split('T')[0]
+        publishDate: postData.publishDate || new Date().toISOString().split('T')[0],
+        author: postData.author || 'Admin',
       };
+
+      console.log('📤 Sending to API:', postToSave);
+      console.log('📤 Italian fields being sent:', {
+        titleIt: postToSave.titleIt,
+        slugIt: postToSave.slugIt,
+        bodyContentIt: postToSave.bodyContentIt ? postToSave.bodyContentIt.substring(0, 50) + '...' : 'empty'
+      });
 
       let url = `${API_BASE_URL}/api/blogs`;
       let method = 'POST';
@@ -155,6 +192,12 @@ export default function App() {
       }
 
       const savedPost = await res.json();
+      console.log('✅ Saved post from API:', savedPost);
+      console.log('✅ Italian fields in saved post:', {
+        titleIt: savedPost.titleIt,
+        slugIt: savedPost.slugIt,
+        bodyContentIt: savedPost.bodyContentIt ? savedPost.bodyContentIt.substring(0, 50) + '...' : 'empty'
+      });
       
       if (editingPost) {
         const editId = editingPost._id || editingPost.id;

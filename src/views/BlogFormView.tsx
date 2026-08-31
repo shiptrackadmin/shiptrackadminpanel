@@ -1,20 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { BlogPost, Category } from '../types';
+import { RichTextEditor } from '../components/RichTextEditor';
 import {
   ArrowLeft,
   Save,
   Send,
   UploadCloud,
   Clock,
-  Bold,
-  Italic,
-  List,
-  Heading,
-  Link,
-  Quote,
-  Code,
   Sparkles,
   Info,
+  Languages,
 } from 'lucide-react';
 
 interface BlogFormViewProps {
@@ -32,22 +27,35 @@ export const BlogFormView: React.FC<BlogFormViewProps> = ({
 }) => {
   const isEditing = Boolean(initialPost?.id);
 
+  // ========== ENGLISH VERSION ==========
   const [title, setTitle] = useState(initialPost?.title || '');
   const [slug, setSlug] = useState(initialPost?.slug || '');
   const [isSlugManuallyEdited, setIsSlugManuallyEdited] = useState(false);
-  const [category, setCategory] = useState(initialPost?.category || (categories.length > 0 ? categories[0].name : ''));
-  const [featuredImage, setFeaturedImage] = useState(initialPost?.featuredImage || '');
   const [bodyContent, setBodyContent] = useState(initialPost?.bodyContent || '');
   const [shortSummary, setShortSummary] = useState(initialPost?.shortSummary || '');
-  const [targetKeywords, setTargetKeywords] = useState(initialPost?.targetKeywords || '');
-  const [readTime, setReadTime] = useState(initialPost?.readTime || '5 minutes');
   const [seoTitle, setSeoTitle] = useState(initialPost?.seoTitle || '');
   const [seoDescription, setSeoDescription] = useState(initialPost?.seoDescription || '');
+
+  // ========== ITALIAN VERSION ==========
+  const [titleIt, setTitleIt] = useState(initialPost?.titleIt || '');
+  const [slugIt, setSlugIt] = useState(initialPost?.slugIt || '');
+  const [isSlugItManuallyEdited, setIsSlugItManuallyEdited] = useState(false);
+  const [bodyContentIt, setBodyContentIt] = useState(initialPost?.bodyContentIt || '');
+  const [shortSummaryIt, setShortSummaryIt] = useState(initialPost?.shortSummaryIt || '');
+  const [seoTitleIt, setSeoTitleIt] = useState(initialPost?.seoTitleIt || '');
+  const [seoDescriptionIt, setSeoDescriptionIt] = useState(initialPost?.seoDescriptionIt || '');
+
+  // ========== COMMON FIELDS ==========
+  const [category, setCategory] = useState(initialPost?.category || (categories.length > 0 ? categories[0].name : ''));
+  const [featuredImage, setFeaturedImage] = useState(initialPost?.featuredImage || '');
+  const [targetKeywords, setTargetKeywords] = useState(initialPost?.targetKeywords || '');
+  const [readTime, setReadTime] = useState(initialPost?.readTime || '5 minutes');
   const [status, setStatus] = useState<'Published' | 'Draft'>(initialPost?.status || 'Draft');
   const [publishDate, setPublishDate] = useState(
     initialPost?.publishDate || new Date().toISOString().split('T')[0]
   );
 
+  // Auto-generate English slug from English title
   useEffect(() => {
     if (!isSlugManuallyEdited && title && !isEditing) {
       const generated = title
@@ -59,30 +67,62 @@ export const BlogFormView: React.FC<BlogFormViewProps> = ({
     }
   }, [title, isSlugManuallyEdited, isEditing]);
 
-  const handleInsertTag = (tag: string) => {
-    setBodyContent((prev) => prev + `\n${tag} `);
-  };
+  // Auto-generate Italian slug from Italian title
+  useEffect(() => {
+    if (!isSlugItManuallyEdited && titleIt && !isEditing) {
+      const generated = titleIt
+        .toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, '')
+        .trim()
+        .replace(/\s+/g, '-');
+      setSlugIt(generated);
+    }
+  }, [titleIt, isSlugItManuallyEdited, isEditing]);
 
   const handleFormSubmit = (targetStatus: 'Published' | 'Draft') => {
+    console.log('📝 Submitting form with Italian fields:', {
+      titleIt,
+      slugIt,
+      bodyContentIt: bodyContentIt.substring(0, 50) + '...',
+      shortSummaryIt,
+      seoTitleIt,
+      seoDescriptionIt
+    });
+
     onSave(
       {
         id: initialPost?.id,
+        // English
         title,
         slug,
-        category,
-        featuredImage,
         bodyContent,
         shortSummary,
-        targetKeywords,
-        readTime,
         seoTitle: seoTitle || title,
         seoDescription: seoDescription || shortSummary,
+        // Italian
+        titleIt: titleIt || '',
+        slugIt: slugIt || '',
+        bodyContentIt: bodyContentIt || '',
+        shortSummaryIt: shortSummaryIt || '',
+        seoTitleIt: seoTitleIt || titleIt || '',
+        seoDescriptionIt: seoDescriptionIt || shortSummaryIt || '',
+        // Common
+        category,
+        featuredImage,
+        targetKeywords,
+        readTime,
         status: targetStatus,
         publishDate,
         author: initialPost?.author || 'Admin',
       },
       targetStatus
     );
+  };
+
+  const countPlainText = (html: string) => {
+    const div = document.createElement('div');
+    div.innerHTML = html;
+    return div.textContent?.length || 0;
   };
 
   return (
@@ -100,7 +140,7 @@ export const BlogFormView: React.FC<BlogFormViewProps> = ({
               {isEditing ? `Edit Post: ${initialPost?.title}` : 'Create New Post'}
             </h1>
             <p className="text-sm text-slate-500 mt-0.5">
-              Fill in post metadata, rich text body, manual read time, and SEO configurations.
+              Enter both English and Italian versions of your article.
             </p>
           </div>
         </div>
@@ -127,48 +167,222 @@ export const BlogFormView: React.FC<BlogFormViewProps> = ({
             className="px-4 py-2 rounded-xl text-sm font-semibold text-white bg-[#1e3a8a] hover:bg-[#2563eb] transition-colors flex items-center gap-2 shadow-xs"
           >
             <Send className="w-4 h-4" />
-            <span>Publish Post</span>
+            <span>Publish</span>
           </button>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
-          <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-xs space-y-4">
-            <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
-                Post Title *
-              </label>
-              <input
-                type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                placeholder="e.g. How to Track International Parcel Customs Clearance"
-                className="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-base font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:bg-white transition-all"
-                required
-              />
+          {/* ========== ENGLISH SECTION ========== */}
+          <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-xs">
+            <div className="flex items-center gap-2 mb-4">
+              <Languages className="w-5 h-5 text-blue-600" />
+              <h2 className="text-sm font-bold text-slate-900">English Version</h2>
+              <span className="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-bold">Default</span>
             </div>
 
-            <div>
-              <label className="block text-xs font-semibold text-slate-600 mb-1">
-                URL Slug
-              </label>
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-slate-400 font-mono bg-slate-100 px-3 py-2 rounded-xl border border-slate-200">
-                  shiptrack.com/blog/
-                </span>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+                  Title *
+                </label>
                 <input
                   type="text"
-                  value={slug}
-                  onChange={(e) => {
-                    setSlug(e.target.value);
-                    setIsSlugManuallyEdited(true);
-                  }}
-                  placeholder="auto-generated-slug"
-                  className="flex-1 px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-mono text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:bg-white transition-all"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  placeholder="e.g. How to Track International Parcel"
+                  className="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-base font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:bg-white transition-all"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-600 mb-1">
+                  URL Slug
+                </label>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-xs text-slate-400 font-mono bg-slate-100 px-3 py-2 rounded-xl border border-slate-200">
+                    shiptrack.com/blog/
+                  </span>
+                  <input
+                    type="text"
+                    value={slug}
+                    onChange={(e) => {
+                      setSlug(e.target.value);
+                      setIsSlugManuallyEdited(true);
+                    }}
+                    placeholder="auto-generated-slug"
+                    className="flex-1 min-w-[120px] px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-mono text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:bg-white transition-all"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
+                  Body Content *
+                </label>
+                <RichTextEditor
+                  value={bodyContent}
+                  onChange={setBodyContent}
+                  placeholder="Write your English article content here..."
+                />
+              </div>
+
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
+                    Short Summary
+                  </label>
+                  <span className={`text-xs ${shortSummary.length > 160 ? 'text-red-500 font-bold' : 'text-slate-400'}`}>
+                    {shortSummary.length} / 160 chars
+                  </span>
+                </div>
+                <textarea
+                  rows={2}
+                  value={shortSummary}
+                  onChange={(e) => setShortSummary(e.target.value)}
+                  placeholder="Brief English summary..."
+                  className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:bg-white transition-all"
+                />
+              </div>
+
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block text-xs font-semibold text-slate-700">SEO Title</label>
+                  <span className="text-[11px] text-slate-400">{seoTitle.length} / 60 chars</span>
+                </div>
+                <input
+                  type="text"
+                  value={seoTitle}
+                  onChange={(e) => setSeoTitle(e.target.value)}
+                  placeholder={title || 'Custom search engine title...'}
+                  className="w-full px-3.5 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:bg-white transition-all"
+                />
+              </div>
+
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block text-xs font-semibold text-slate-700">SEO Meta Description</label>
+                  <span className="text-[11px] text-slate-400">{seoDescription.length} / 160 chars</span>
+                </div>
+                <textarea
+                  rows={2}
+                  value={seoDescription}
+                  onChange={(e) => setSeoDescription(e.target.value)}
+                  placeholder={shortSummary || 'Custom search engine snippet...'}
+                  className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:bg-white transition-all"
                 />
               </div>
             </div>
+          </div>
+
+          {/* ========== ITALIAN SECTION ========== */}
+          <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-xs">
+            <div className="flex items-center gap-2 mb-4">
+              <Languages className="w-5 h-5 text-green-600" />
+              <h2 className="text-sm font-bold text-slate-900">Italian Version</h2>
+              <span className="text-[10px] bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-bold">Optional</span>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  Titolo
+                </label>
+                <input
+                  type="text"
+                  value={titleIt}
+                  onChange={(e) => setTitleIt(e.target.value)}
+                  placeholder="e.g. Come Tracciare un Pacco Internazionale"
+                  className="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-base font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-green-600 focus:bg-white transition-all"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-600 mb-1">
+                  URL Slug (Italiano)
+                </label>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-xs text-slate-400 font-mono bg-slate-100 px-3 py-2 rounded-xl border border-slate-200">
+                    shiptrack.com/blog/it/
+                  </span>
+                  <input
+                    type="text"
+                    value={slugIt}
+                    onChange={(e) => {
+                      setSlugIt(e.target.value);
+                      setIsSlugItManuallyEdited(true);
+                    }}
+                    placeholder="slug-italiano"
+                    className="flex-1 min-w-[120px] px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-mono text-slate-800 focus:outline-none focus:ring-2 focus:ring-green-600 focus:bg-white transition-all"
+                  />
+                </div>
+                <p className="text-[11px] text-slate-400 mt-1">Leave empty to use English version as fallback</p>
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  Contenuto
+                </label>
+                <RichTextEditor
+                  value={bodyContentIt}
+                  onChange={setBodyContentIt}
+                  placeholder="Scrivi il contenuto dell'articolo in italiano..."
+                />
+              </div>
+
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block text-xs font-semibold text-slate-700">
+                    Breve Riassunto
+                  </label>
+                  <span className={`text-xs ${shortSummaryIt.length > 160 ? 'text-red-500 font-bold' : 'text-slate-400'}`}>
+                    {shortSummaryIt.length} / 160 chars
+                  </span>
+                </div>
+                <textarea
+                  rows={2}
+                  value={shortSummaryIt}
+                  onChange={(e) => setShortSummaryIt(e.target.value)}
+                  placeholder="Breve riassunto in italiano..."
+                  className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-green-600 focus:bg-white transition-all"
+                />
+              </div>
+
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block text-xs font-semibold text-slate-700">SEO Titolo</label>
+                  <span className="text-[11px] text-slate-400">{seoTitleIt.length} / 60 chars</span>
+                </div>
+                <input
+                  type="text"
+                  value={seoTitleIt}
+                  onChange={(e) => setSeoTitleIt(e.target.value)}
+                  placeholder={titleIt || 'Titolo SEO personalizzato...'}
+                  className="w-full px-3.5 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-green-600 focus:bg-white transition-all"
+                />
+              </div>
+
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block text-xs font-semibold text-slate-700">SEO Meta Descrizione</label>
+                  <span className="text-[11px] text-slate-400">{seoDescriptionIt.length} / 160 chars</span>
+                </div>
+                <textarea
+                  rows={2}
+                  value={seoDescriptionIt}
+                  onChange={(e) => setSeoDescriptionIt(e.target.value)}
+                  placeholder={shortSummaryIt || 'Descrizione SEO personalizzata...'}
+                  className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-green-600 focus:bg-white transition-all"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* ========== COMMON FIELDS ========== */}
+          <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-xs space-y-4">
+            <h2 className="text-sm font-bold text-slate-900">Common Settings</h2>
 
             <div>
               <label className="block text-xs font-semibold text-slate-700 mb-1">
@@ -190,150 +404,6 @@ export const BlogFormView: React.FC<BlogFormViewProps> = ({
                 )}
               </select>
             </div>
-          </div>
-
-          <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-xs">
-            <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">
-              Featured Image
-            </label>
-            <div className="border-2 border-dashed border-slate-300 rounded-xl p-6 text-center bg-slate-50/50 hover:bg-slate-50 transition-colors">
-              <UploadCloud className="w-8 h-8 text-blue-600 mx-auto mb-2" />
-              <p className="text-xs font-semibold text-slate-700">
-                Drag and drop your hero image here, or paste image URL below
-              </p>
-              <p className="text-[11px] text-slate-400 mt-0.5">PNG, JPG, WebP up to 5MB</p>
-
-              <div className="mt-4 max-w-lg mx-auto flex items-center gap-2">
-                <input
-                  type="url"
-                  value={featuredImage}
-                  onChange={(e) => setFeaturedImage(e.target.value)}
-                  placeholder="https://images.unsplash.com/..."
-                  className="flex-1 px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                />
-                <button
-                  type="button"
-                  onClick={() =>
-                    setFeaturedImage(
-                      'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=800&q=80'
-                    )
-                  }
-                  className="px-3 py-2 bg-slate-200 hover:bg-slate-300 rounded-xl text-xs font-medium text-slate-700 transition-colors"
-                >
-                  Load Sample Image
-                </button>
-              </div>
-
-              {featuredImage && (
-                <div className="mt-4 max-w-sm mx-auto rounded-lg overflow-hidden border border-slate-200 max-h-40">
-                  <img
-                    src={featuredImage}
-                    alt="Featured preview"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-xs space-y-3">
-            <div className="flex items-center justify-between">
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
-                Body Content (Rich Text) *
-              </label>
-              <span className="text-xs text-slate-400 font-mono">
-                {bodyContent.length} characters
-              </span>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-1 p-2 bg-slate-100 rounded-xl border border-slate-200 text-slate-700">
-              <button
-                type="button"
-                onClick={() => handleInsertTag('**Bold Text**')}
-                className="p-1.5 rounded-lg hover:bg-slate-200 transition-colors"
-                title="Bold"
-              >
-                <Bold className="w-4 h-4" />
-              </button>
-              <button
-                type="button"
-                onClick={() => handleInsertTag('*Italic Text*')}
-                className="p-1.5 rounded-lg hover:bg-slate-200 transition-colors"
-                title="Italic"
-              >
-                <Italic className="w-4 h-4" />
-              </button>
-              <div className="w-px h-4 bg-slate-300 mx-1" />
-              <button
-                type="button"
-                onClick={() => handleInsertTag('### Subheading')}
-                className="p-1.5 rounded-lg hover:bg-slate-200 transition-colors"
-                title="Heading"
-              >
-                <Heading className="w-4 h-4" />
-              </button>
-              <button
-                type="button"
-                onClick={() => handleInsertTag('- List Item')}
-                className="p-1.5 rounded-lg hover:bg-slate-200 transition-colors"
-                title="Bullet List"
-              >
-                <List className="w-4 h-4" />
-              </button>
-              <button
-                type="button"
-                onClick={() => handleInsertTag('> Quote block')}
-                className="p-1.5 rounded-lg hover:bg-slate-200 transition-colors"
-                title="Quote"
-              >
-                <Quote className="w-4 h-4" />
-              </button>
-              <button
-                type="button"
-                onClick={() => handleInsertTag('[Link Text](https://shiptrack.com)')}
-                className="p-1.5 rounded-lg hover:bg-slate-200 transition-colors"
-                title="Link"
-              >
-                <Link className="w-4 h-4" />
-              </button>
-              <button
-                type="button"
-                onClick={() => handleInsertTag('```\ncode block\n```')}
-                className="p-1.5 rounded-lg hover:bg-slate-200 transition-colors"
-                title="Code Block"
-              >
-                <Code className="w-4 h-4" />
-              </button>
-            </div>
-
-            <textarea
-              rows={10}
-              value={bodyContent}
-              onChange={(e) => setBodyContent(e.target.value)}
-              placeholder="Write or paste your article content here..."
-              className="w-full p-4 bg-slate-50 border border-slate-300 rounded-xl text-sm font-sans text-slate-800 leading-relaxed focus:outline-none focus:ring-2 focus:ring-blue-600 focus:bg-white transition-all"
-              required
-            />
-          </div>
-
-          <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-xs space-y-4">
-            <div>
-              <div className="flex items-center justify-between mb-1">
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700">
-                  Short Summary / Excerpt
-                </label>
-                <span className={`text-xs ${shortSummary.length > 160 ? 'text-red-500 font-bold' : 'text-slate-400'}`}>
-                  {shortSummary.length} / 160 chars
-                </span>
-              </div>
-              <textarea
-                rows={3}
-                value={shortSummary}
-                onChange={(e) => setShortSummary(e.target.value)}
-                placeholder="Brief summary used in article preview cards and RSS feeds..."
-                className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:bg-white transition-all"
-              />
-            </div>
 
             <div>
               <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
@@ -348,48 +418,54 @@ export const BlogFormView: React.FC<BlogFormViewProps> = ({
               />
               <p className="text-[11px] text-slate-400 mt-1">Comma-separated key phrases</p>
             </div>
-          </div>
-
-          <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-xs space-y-4">
-            <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-blue-600" />
-              SEO Title & Meta Description Override
-            </h3>
 
             <div>
-              <div className="flex items-center justify-between mb-1">
-                <label className="block text-xs font-semibold text-slate-700">SEO Title</label>
-                <span className="text-[11px] text-slate-400">{seoTitle.length} / 60 chars</span>
-              </div>
-              <input
-                type="text"
-                value={seoTitle}
-                onChange={(e) => setSeoTitle(e.target.value)}
-                placeholder={title || 'Custom search engine title...'}
-                className="w-full px-3.5 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:bg-white transition-all"
-              />
-            </div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">
+                Featured Image
+              </label>
+              <div className="border-2 border-dashed border-slate-300 rounded-xl p-6 text-center bg-slate-50/50 hover:bg-slate-50 transition-colors">
+                <UploadCloud className="w-8 h-8 text-blue-600 mx-auto mb-2" />
+                <p className="text-xs font-semibold text-slate-700">
+                  Drag and drop your hero image here, or paste image URL below
+                </p>
+                <p className="text-[11px] text-slate-400 mt-0.5">PNG, JPG, WebP up to 5MB</p>
 
-            <div>
-              <div className="flex items-center justify-between mb-1">
-                <label className="block text-xs font-semibold text-slate-700">
-                  SEO Meta Description
-                </label>
-                <span className="text-[11px] text-slate-400">
-                  {seoDescription.length} / 160 chars
-                </span>
+                <div className="mt-4 max-w-lg mx-auto flex items-center gap-2">
+                  <input
+                    type="url"
+                    value={featuredImage}
+                    onChange={(e) => setFeaturedImage(e.target.value)}
+                    placeholder="https://images.unsplash.com/..."
+                    className="flex-1 px-3 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                  />
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setFeaturedImage(
+                        'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=800&q=80'
+                      )
+                    }
+                    className="px-3 py-2 bg-slate-200 hover:bg-slate-300 rounded-xl text-xs font-medium text-slate-700 transition-colors"
+                  >
+                    Load Sample
+                  </button>
+                </div>
+
+                {featuredImage && (
+                  <div className="mt-4 max-w-sm mx-auto rounded-lg overflow-hidden border border-slate-200 max-h-40">
+                    <img
+                      src={featuredImage}
+                      alt="Featured preview"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                )}
               </div>
-              <textarea
-                rows={3}
-                value={seoDescription}
-                onChange={(e) => setSeoDescription(e.target.value)}
-                placeholder={shortSummary || 'Custom search engine snippet...'}
-                className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:bg-white transition-all"
-              />
             </div>
           </div>
         </div>
 
+        {/* ========== SIDEBAR ========== */}
         <div className="space-y-6">
           <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-xs space-y-4">
             <h3 className="text-xs font-bold uppercase tracking-wider text-slate-700 border-b border-slate-100 pb-2">
@@ -437,7 +513,7 @@ export const BlogFormView: React.FC<BlogFormViewProps> = ({
             <div className="flex items-center gap-2 text-blue-900">
               <Clock className="w-4 h-4 text-blue-600" />
               <h3 className="text-xs font-bold uppercase tracking-wider">
-                Estimated Read Time (Manual Entry)
+                Estimated Read Time
               </h3>
             </div>
 
@@ -458,7 +534,7 @@ export const BlogFormView: React.FC<BlogFormViewProps> = ({
             <div className="flex items-start gap-1.5 p-2.5 rounded-lg bg-blue-100/60 border border-blue-200 text-[11px] text-blue-900 font-medium">
               <Info className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
               <span>
-                <strong>Note:</strong> Read time is manually specified by the admin and will not be auto-calculated.
+                <strong>Note:</strong> Read time is manually specified by the admin.
               </span>
             </div>
           </div>
@@ -487,7 +563,7 @@ export const BlogFormView: React.FC<BlogFormViewProps> = ({
               onClick={onCancel}
               className="w-full py-2 px-4 text-slate-500 hover:text-slate-800 text-xs font-semibold transition-colors"
             >
-              Discard & Cancel
+              Cancel & Close
             </button>
           </div>
         </div>

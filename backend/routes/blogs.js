@@ -27,13 +27,47 @@ router.get('/:slug', async (req, res) => {
   }
 });
 
+// GET a blog by Italian slug
+router.get('/it/:slugIt', async (req, res) => {
+  try {
+    const blog = await Blog.findOne({ slugIt: req.params.slugIt });
+    if (!blog) {
+      return res.status(404).json({ error: 'Blog not found' });
+    }
+    res.json(blog);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // POST create a new blog
 router.post('/', async (req, res) => {
   try {
+    console.log('📥 Backend received body:', req.body);
+    console.log('📥 Italian fields in backend:', {
+      titleIt: req.body.titleIt,
+      slugIt: req.body.slugIt,
+      bodyContentIt: req.body.bodyContentIt ? req.body.bodyContentIt.substring(0, 50) + '...' : 'empty',
+      shortSummaryIt: req.body.shortSummaryIt,
+      seoTitleIt: req.body.seoTitleIt,
+      seoDescriptionIt: req.body.seoDescriptionIt
+    });
+    
     const blog = new Blog(req.body);
     await blog.save();
+    
+    console.log('✅ Saved blog:', {
+      id: blog._id,
+      title: blog.title,
+      titleIt: blog.titleIt,
+      slugIt: blog.slugIt,
+      hasBodyContentIt: !!blog.bodyContentIt,
+      bodyContentItLength: blog.bodyContentIt ? blog.bodyContentIt.length : 0
+    });
+    
     res.status(201).json(blog);
   } catch (error) {
+    console.error('❌ Error saving blog:', error);
     res.status(400).json({ error: error.message });
   }
 });
@@ -41,6 +75,13 @@ router.post('/', async (req, res) => {
 // PUT update a blog
 router.put('/:id', async (req, res) => {
   try {
+    console.log('📥 Backend received PUT body:', req.body);
+    console.log('📥 Italian fields in PUT:', {
+      titleIt: req.body.titleIt,
+      slugIt: req.body.slugIt,
+      bodyContentIt: req.body.bodyContentIt ? req.body.bodyContentIt.substring(0, 50) + '...' : 'empty'
+    });
+    
     const blog = await Blog.findByIdAndUpdate(
       req.params.id,
       req.body,
@@ -49,8 +90,17 @@ router.put('/:id', async (req, res) => {
     if (!blog) {
       return res.status(404).json({ error: 'Blog not found' });
     }
+    
+    console.log('✅ Updated blog:', {
+      id: blog._id,
+      title: blog.title,
+      titleIt: blog.titleIt,
+      hasBodyContentIt: !!blog.bodyContentIt
+    });
+    
     res.json(blog);
   } catch (error) {
+    console.error('❌ Error updating blog:', error);
     res.status(400).json({ error: error.message });
   }
 });
@@ -61,7 +111,6 @@ router.delete('/:id', async (req, res) => {
     const id = req.params.id;
     console.log('Deleting blog with ID:', id);
     
-    // Check if ID is valid
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({ error: 'Invalid ID format' });
     }

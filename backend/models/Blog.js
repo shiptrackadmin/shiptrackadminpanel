@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 
 const BlogSchema = new mongoose.Schema({
+  // ========== ENGLISH VERSION (Required) ==========
   title: {
     type: String,
     required: true,
@@ -13,6 +14,53 @@ const BlogSchema = new mongoose.Schema({
     trim: true,
     lowercase: true
   },
+  bodyContent: {
+    type: String,
+    required: true
+  },
+  shortSummary: {
+    type: String,
+    default: ''
+  },
+  seoTitle: {
+    type: String,
+    default: ''
+  },
+  seoDescription: {
+    type: String,
+    default: ''
+  },
+  
+  // ========== ITALIAN VERSION (Optional) ==========
+  titleIt: {
+    type: String,
+    default: '',
+    trim: true
+  },
+  slugIt: {
+    type: String,
+    trim: true,
+    lowercase: true,
+    default: ''
+  },
+  bodyContentIt: {
+    type: String,
+    default: ''
+  },
+  shortSummaryIt: {
+    type: String,
+    default: ''
+  },
+  seoTitleIt: {
+    type: String,
+    default: ''
+  },
+  seoDescriptionIt: {
+    type: String,
+    default: ''
+  },
+  
+  // ========== COMMON FIELDS ==========
   category: {
     type: String,
     required: true
@@ -34,27 +82,11 @@ const BlogSchema = new mongoose.Schema({
     type: String,
     default: '5 minutes'
   },
-  shortSummary: {
-    type: String,
-    default: ''
-  },
-  bodyContent: {
-    type: String,
-    required: true
-  },
   featuredImage: {
     type: String,
     default: ''
   },
   targetKeywords: {
-    type: String,
-    default: ''
-  },
-  seoTitle: {
-    type: String,
-    default: ''
-  },
-  seoDescription: {
     type: String,
     default: ''
   },
@@ -73,6 +105,9 @@ BlogSchema.pre('save', function(next) {
   this.updatedAt = Date.now();
   next();
 });
+
+// Allow slugIt to be empty but unique when provided
+BlogSchema.index({ slugIt: 1 }, { unique: true, sparse: true });
 
 const Blog = mongoose.model('Blog', BlogSchema);
 export default Blog;
