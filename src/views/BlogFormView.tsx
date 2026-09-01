@@ -55,53 +55,50 @@ export const BlogFormView: React.FC<BlogFormViewProps> = ({
     initialPost?.publishDate || new Date().toISOString().split('T')[0]
   );
 
+  // Helper function to generate clean slug
+  const generateSlug = (text: string) => {
+    return text
+      .toLowerCase()
+      // Remove accents (è → e, à → a, etc.)
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      // Keep only letters, numbers, spaces, and hyphens
+      .replace(/[^a-z0-9\s-]/g, '')
+      .trim()
+      // Replace spaces with hyphens
+      .replace(/\s+/g, '-')
+      // Remove multiple hyphens
+      .replace(/-+/g, '-');
+  };
+
   // Auto-generate English slug from English title
   useEffect(() => {
     if (!isSlugManuallyEdited && title && !isEditing) {
-      const generated = title
-        .toLowerCase()
-        .replace(/[^a-z0-9\s-]/g, '')
-        .trim()
-        .replace(/\s+/g, '-');
-      setSlug(generated);
+      setSlug(generateSlug(title));
     }
   }, [title, isSlugManuallyEdited, isEditing]);
 
   // Auto-generate Italian slug from Italian title
   useEffect(() => {
     if (!isSlugItManuallyEdited && titleIt && !isEditing) {
-      const generated = titleIt
-        .toLowerCase()
-        .replace(/[^a-z0-9\s-]/g, '')
-        .trim()
-        .replace(/\s+/g, '-');
-      setSlugIt(generated);
+      setSlugIt(generateSlug(titleIt));
     }
   }, [titleIt, isSlugItManuallyEdited, isEditing]);
 
   const handleFormSubmit = (targetStatus: 'Published' | 'Draft') => {
-    console.log('📝 Submitting form with Italian fields:', {
-      titleIt,
-      slugIt,
-      bodyContentIt: bodyContentIt.substring(0, 50) + '...',
-      shortSummaryIt,
-      seoTitleIt,
-      seoDescriptionIt
-    });
-
     onSave(
       {
         id: initialPost?.id,
         // English
         title,
-        slug,
+        slug: slug || generateSlug(title),
         bodyContent,
         shortSummary,
         seoTitle: seoTitle || title,
         seoDescription: seoDescription || shortSummary,
         // Italian
         titleIt: titleIt || '',
-        slugIt: slugIt || '',
+        slugIt: slugIt || (titleIt ? generateSlug(titleIt) : ''),
         bodyContentIt: bodyContentIt || '',
         shortSummaryIt: shortSummaryIt || '',
         seoTitleIt: seoTitleIt || titleIt || '',
@@ -294,7 +291,7 @@ export const BlogFormView: React.FC<BlogFormViewProps> = ({
                 </label>
                 <div className="flex items-center gap-2 flex-wrap">
                   <span className="text-xs text-slate-400 font-mono bg-slate-100 px-3 py-2 rounded-xl border border-slate-200">
-                    shiptrack.com/blog/it/
+                    shiptrack.com/blog/
                   </span>
                   <input
                     type="text"
