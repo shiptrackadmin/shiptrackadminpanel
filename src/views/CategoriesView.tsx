@@ -115,52 +115,62 @@ export const CategoriesView: React.FC<CategoriesViewProps> = ({
 
       {/* Category Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-        {filteredCategories.map((cat) => (
-          <div
-            key={cat.id}
-            className="bg-white rounded-xl border border-slate-200 p-5 shadow-xs hover:shadow-md transition-all flex flex-col justify-between gap-4 group"
-          >
-            <div>
-              <div className="flex items-start justify-between gap-2 mb-2">
-                <div className="w-9 h-9 rounded-xl bg-blue-50 text-[#1e3a8a] flex items-center justify-center shrink-0">
-                  <Tag className="w-4 h-4" />
+        {filteredCategories.length === 0 ? (
+          <div className="col-span-full text-center py-12">
+            <p className="text-slate-500 text-sm">Nessuna categoria trovata</p>
+          </div>
+        ) : (
+          filteredCategories.map((cat) => (
+            <div
+              key={cat.id}
+              className="bg-white rounded-xl border border-slate-200 p-5 shadow-xs hover:shadow-md transition-all flex flex-col justify-between gap-4 group"
+            >
+              <div>
+                <div className="flex items-start justify-between gap-2 mb-2">
+                  <div className="w-9 h-9 rounded-xl bg-blue-50 text-[#1e3a8a] flex items-center justify-center shrink-0">
+                    <Tag className="w-4 h-4" />
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <button
+                      onClick={() => handleOpenEditModal(cat)}
+                      className="p-1.5 rounded-lg text-slate-400 hover:text-[#1e3a8a] hover:bg-slate-100 transition-colors"
+                      title="Modifica Categoria"
+                    >
+                      <Edit className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => {
+                        if (window.confirm(`Sei sicuro di voler eliminare la categoria "${cat.name}"?`)) {
+                          onDeleteCategory(cat);
+                        }
+                      }}
+                      className="p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors"
+                      title="Elimina Categoria"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
-                <div className="flex items-center gap-1">
-                  <button
-                    onClick={() => handleOpenEditModal(cat)}
-                    className="p-1.5 rounded-lg text-slate-400 hover:text-[#1e3a8a] hover:bg-slate-100 transition-colors"
-                    title="Modifica Categoria"
-                  >
-                    <Edit className="w-4 h-4" />
-                  </button>
-                  <button
-                    onClick={() => onDeleteCategory(cat)}
-                    className="p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors"
-                    title="Elimina Categoria"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                </div>
+
+                {/* Category Name (bold) */}
+                <h3 className="font-bold text-slate-900 text-base group-hover:text-[#2563eb] transition-colors">
+                  {cat.name}
+                </h3>
+
+                {/* Slug */}
+                <p className="text-xs font-mono text-slate-500 mt-1">{cat.slug}</p>
               </div>
 
-              {/* Category Name (bold) */}
-              <h3 className="font-bold text-slate-900 text-base group-hover:text-[#2563eb] transition-colors">
-                {cat.name}
-              </h3>
-
-              {/* Slug */}
-              <p className="text-xs font-mono text-slate-500 mt-1">{cat.slug}</p>
+              {/* Bottom Meta */}
+              <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                <span className="font-semibold text-slate-700 bg-slate-100 px-2.5 py-1 rounded-md">
+                  {cat.postCount || 0} articoli
+                </span>
+                <span className="font-mono text-[11px] text-slate-400">Creata il {cat.createdDate || 'N/A'}</span>
+              </div>
             </div>
-
-            {/* Bottom Meta */}
-            <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-              <span className="font-semibold text-slate-700 bg-slate-100 px-2.5 py-1 rounded-md">
-                {cat.postCount} articoli
-              </span>
-              <span className="font-mono text-[11px] text-slate-400">Creata il {cat.createdDate}</span>
-            </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
 
       {/* Add Category Modal */}

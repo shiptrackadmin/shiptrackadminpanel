@@ -112,6 +112,48 @@ export default function App() {
     }
   };
 
+  // ========== DELETE CATEGORY ==========
+  const handleDeleteCategory = async (category: any) => {
+    const categoryName = category?.name || 'this category';
+    if (!window.confirm(`Sei sicuro di voler eliminare la categoria "${categoryName}"?`)) return;
+
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        showToast('Error', 'Per favore, effettua di nuovo il login', 'error');
+        return;
+      }
+
+      const categoryId = category?._id || category?.id;
+      if (!categoryId) {
+        showToast('Error', 'ID categoria non valido', 'error');
+        return;
+      }
+
+      console.log('🗑️ Deleting category with ID:', categoryId);
+
+      const res = await fetch(`${API_BASE_URL}/api/categories/${categoryId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        showToast('Error', errorData.error || 'Impossibile eliminare la categoria', 'error');
+        return;
+      }
+
+      setCategories(categories.filter(c => (c._id || c.id) !== categoryId));
+      showToast('Categoria Eliminata', `"${categoryName}" è stata rimossa.`, 'info');
+
+    } catch (error) {
+      console.error('Error deleting category:', error);
+      showToast('Error', 'Impossibile eliminare la categoria. Controlla la console per i dettagli.', 'error');
+    }
+  };
+
   const handleSavePost = async (postData: any, targetStatus: 'Published' | 'Draft') => {
     try {
       const token = localStorage.getItem('token');
@@ -310,7 +352,7 @@ export default function App() {
               categories={categories}
               onAddCategory={handleAddCategory}
               onEditCategory={() => {}}
-              onDeleteCategory={() => {}}
+              onDeleteCategory={handleDeleteCategory}
             />
           )}
           {currentPage === 'seo' && (
