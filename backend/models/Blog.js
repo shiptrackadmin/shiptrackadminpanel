@@ -109,5 +109,78 @@ BlogSchema.pre('save', function(next) {
 // Allow slugIt to be empty but unique when provided
 BlogSchema.index({ slugIt: 1 }, { unique: true, sparse: true });
 
+// ========== AUTO-UPDATE CATEGORY POST COUNTS ==========
+
+// After a blog is saved, update category post count
+BlogSchema.post('save', async function(doc) {
+  try {
+    const Category = mongoose.model('Category');
+    // Count only published posts in this category
+    const count = await mongoose.model('Blog').countDocuments({ 
+      category: doc.category, 
+      status: 'Published' 
+    });
+    await Category.findOneAndUpdate(
+      { name: doc.category },
+      { 
+        postCount: count,
+        createdDate: new Date().toISOString().split('T')[0]
+      },
+      { upsert: true, new: true }
+    );
+    console.log(`📊 Updated category "${doc.category}" post count to ${count}`);
+  } catch (error) {
+    console.error('Error updating category count:', error);
+  }
+});
+
+// After a blog is deleted, update category post count
+BlogSchema.post('findOneAndDelete', async function(doc) {
+  if (doc) {
+    try {
+      const Category = mongoose.model('Category');
+      const count = await mongoose.model('Blog').countDocuments({ 
+        category: doc.category, 
+        status: 'Published' 
+      });
+      await Category.findOneAndUpdate(
+        { name: doc.category },
+        { 
+          postCount: count,
+          createdDate: new Date().toISOString().split('T')[0]
+        },
+        { upsert: true, new: true }
+      );
+      console.log(`📊 Updated category "${doc.category}" post count to ${count}`);
+    } catch (error) {
+      console.error('Error updating category count after delete:', error);
+    }
+  }
+});
+
+// After a blog is updated (status change), update category post count
+BlogSchema.post('findOneAndUpdate', async function(doc) {
+  if (doc) {
+    try {
+      const Category = mongoose.model('Category');
+      const count = await mongoose.model('Blog').countDocuments({ 
+        category: doc.category, 
+        status: 'Published' 
+      });
+      await Category.findOneAndUpdate(
+        { name: doc.category },
+        { 
+          postCount: count,
+          createdDate: new Date().toISOString().split('T')[0]
+        },
+        { upsert: true, new: true }
+      );
+      console.log(`📊 Updated category "${doc.category}" post count to ${count}`);
+    } catch (error) {
+      console.error('Error updating category count after update:', error);
+    }
+  }
+});
+
 const Blog = mongoose.model('Blog', BlogSchema);
 export default Blog;
