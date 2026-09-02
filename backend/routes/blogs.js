@@ -14,20 +14,28 @@ router.get('/', async (req, res) => {
   }
 });
 
-// GET a single blog by slug
+// GET a single blog by slug (English OR Italian)
 router.get('/:slug', async (req, res) => {
   try {
-    const blog = await Blog.findOne({ slug: req.params.slug });
+    // First try to find by English slug
+    let blog = await Blog.findOne({ slug: req.params.slug });
+    
+    // If not found, try Italian slug
+    if (!blog) {
+      blog = await Blog.findOne({ slugIt: req.params.slug });
+    }
+    
     if (!blog) {
       return res.status(404).json({ error: 'Blog not found' });
     }
+    
     res.json(blog);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
-// GET a blog by Italian slug
+// GET a blog by Italian slug (backward compatibility)
 router.get('/it/:slugIt', async (req, res) => {
   try {
     const blog = await Blog.findOne({ slugIt: req.params.slugIt });
