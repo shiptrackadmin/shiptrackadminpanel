@@ -57,9 +57,13 @@ export const BlogFormView: React.FC<BlogFormViewProps> = ({
 
   // Helper function to generate clean slug with length limit
   const generateSlug = (text: string) => {
-    if (!text) return '';
+    if (!text) {
+      // If no title, generate a timestamp-based slug
+      const timestamp = Date.now().toString(36);
+      return `post-${timestamp}`;
+    }
     
-    return text
+    const slug = text
       .toLowerCase()
       // Remove accents (è → e, à → a, etc.)
       .normalize('NFD')
@@ -75,6 +79,14 @@ export const BlogFormView: React.FC<BlogFormViewProps> = ({
       .replace(/^-+|-+$/g, '')
       // Limit to 60 characters
       .slice(0, 60);
+    
+    // If slug is empty after sanitization, use timestamp
+    if (!slug) {
+      const timestamp = Date.now().toString(36);
+      return `post-${timestamp}`;
+    }
+    
+    return slug;
   };
 
   // Auto-generate English slug from English title
@@ -96,18 +108,18 @@ export const BlogFormView: React.FC<BlogFormViewProps> = ({
     const finalSlug = slug || generateSlug(title);
     const finalSlugIt = slugIt || (titleIt ? generateSlug(titleIt) : '');
 
-    console.log('📝 Submitting with slugs:', { finalSlug, finalSlugIt });
+    console.log('📝 Submitting with slugs:', { finalSlug, finalSlugIt, title, titleIt });
 
     onSave(
       {
         id: initialPost?.id,
         // English
-        title,
+        title: title || 'Untitled',
         slug: finalSlug,
-        bodyContent,
-        shortSummary,
-        seoTitle: seoTitle || title,
-        seoDescription: seoDescription || shortSummary,
+        bodyContent: bodyContent || '<p></p>',
+        shortSummary: shortSummary || '',
+        seoTitle: seoTitle || title || 'Untitled',
+        seoDescription: seoDescription || shortSummary || '',
         // Italian
         titleIt: titleIt || '',
         slugIt: finalSlugIt,
@@ -116,12 +128,12 @@ export const BlogFormView: React.FC<BlogFormViewProps> = ({
         seoTitleIt: seoTitleIt || titleIt || '',
         seoDescriptionIt: seoDescriptionIt || shortSummaryIt || '',
         // Common
-        category,
-        featuredImage,
-        targetKeywords,
-        readTime,
+        category: category || 'Uncategorized',
+        featuredImage: featuredImage || '',
+        targetKeywords: targetKeywords || '',
+        readTime: readTime || '5 minutes',
         status: targetStatus,
-        publishDate,
+        publishDate: publishDate || new Date().toISOString().split('T')[0],
         author: initialPost?.author || 'Admin',
       },
       targetStatus
