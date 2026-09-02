@@ -55,20 +55,26 @@ export const BlogFormView: React.FC<BlogFormViewProps> = ({
     initialPost?.publishDate || new Date().toISOString().split('T')[0]
   );
 
-  // Helper function to generate clean slug
+  // Helper function to generate clean slug with length limit
   const generateSlug = (text: string) => {
+    if (!text) return '';
+    
     return text
       .toLowerCase()
       // Remove accents (è → e, à → a, etc.)
       .normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '')
-      // Keep only letters, numbers, spaces, and hyphens
-      .replace(/[^a-z0-9\s-]/g, '')
+      // Keep only letters, numbers, and spaces
+      .replace(/[^a-z0-9\s]/g, '')
       .trim()
-      // Replace spaces with hyphens
+      // Replace spaces with single hyphens
       .replace(/\s+/g, '-')
       // Remove multiple hyphens
-      .replace(/-+/g, '-');
+      .replace(/-+/g, '-')
+      // Remove leading/trailing hyphens
+      .replace(/^-+|-+$/g, '')
+      // Limit to 60 characters
+      .slice(0, 60);
   };
 
   // Auto-generate English slug from English title
@@ -86,19 +92,25 @@ export const BlogFormView: React.FC<BlogFormViewProps> = ({
   }, [titleIt, isSlugItManuallyEdited, isEditing]);
 
   const handleFormSubmit = (targetStatus: 'Published' | 'Draft') => {
+    // Generate slugs if empty
+    const finalSlug = slug || generateSlug(title);
+    const finalSlugIt = slugIt || (titleIt ? generateSlug(titleIt) : '');
+
+    console.log('📝 Submitting with slugs:', { finalSlug, finalSlugIt });
+
     onSave(
       {
         id: initialPost?.id,
         // English
         title,
-        slug: slug || generateSlug(title),
+        slug: finalSlug,
         bodyContent,
         shortSummary,
         seoTitle: seoTitle || title,
         seoDescription: seoDescription || shortSummary,
         // Italian
         titleIt: titleIt || '',
-        slugIt: slugIt || (titleIt ? generateSlug(titleIt) : ''),
+        slugIt: finalSlugIt,
         bodyContentIt: bodyContentIt || '',
         shortSummaryIt: shortSummaryIt || '',
         seoTitleIt: seoTitleIt || titleIt || '',
