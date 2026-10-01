@@ -110,8 +110,15 @@ BlogSchema.pre('save', function(next) {
   next();
 });
 
-// Allow slugIt to be empty but unique when provided
-BlogSchema.index({ slugIt: 1 }, { sparse: true });
+// Allow multiple empty slugIt values, but require uniqueness when a slug is provided
+BlogSchema.index(
+  { slugIt: 1 }, 
+  { 
+    unique: true, 
+    sparse: true,
+    partialFilterExpression: { slugIt: { $type: 'string', $ne: '' } } 
+  }
+);
 
 // ========== AUTO-UPDATE CATEGORY POST COUNTS ==========
 
