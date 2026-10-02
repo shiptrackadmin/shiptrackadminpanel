@@ -1,4 +1,3 @@
-```js
 import express from 'express';
 import Blog from '../models/Blog.js';
 import mongoose from 'mongoose';
@@ -61,7 +60,7 @@ router.post('/', async (req, res) => {
     const blogData = { ...req.body };
 
     // Remove empty Italian fields.
-    // This allows an English-only blog to be published
+    // English-only blogs can therefore be published
     // without requiring an Italian version.
     const italianFields = [
       'titleIt',
@@ -203,4 +202,3 @@ router.delete('/:id', async (req, res) => {
 });
 
 export default router;
-```
